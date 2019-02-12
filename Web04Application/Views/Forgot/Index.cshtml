@@ -1,0 +1,321 @@
+﻿
+@{
+    ViewBag.Title = "Forgot";
+}
+
+
+<div class="header">
+    <div class="container">
+        <div class="navbar">
+            <a href="#" class="toggle-nav"><span class="icon icon-menu"></span></a>
+            <div id="Divlogo" class="logo-home logo-th pull-left" style="cursor:pointer;" onclick="document.location=Home;"><a href="~/">BBLAM</a></div>
+
+            <ul class="nav pull-left">
+                <li><a href="https://iapp.bblam.co.th" id="Home" title="Home">หน้าแรก</a></li>
+                <li><a href="./" id="Home" title="forgot" class="active">ลืมรหัสผ่าน</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container slider-container">
+
+    <fieldset>
+        <legend>Forgot Form</legend>
+
+        <form method="post" class="" id="form1" action="">
+            <p>
+                <label style="width:180px;">Username</label>
+                <input name="uname" id="uname" />
+            </p>
+            <p>
+                <label style="width:180px;">Mobile Number</label>
+                <input name="mobile" id="mobile" />
+            </p>
+            <div class="error1"></div>
+            <div class="error2"></div>
+            <p>
+                <input style="width:375px;" id="btn1" class="submit" type="button" value="Send OTP" />
+            </p>
+        </form>
+        @using (Html.BeginForm("update", "Forgot", FormMethod.Post, new { Id = "form2" }))
+        {
+            <input type="hidden" id="mobile_no" name="mobile_no" />
+            <input type="hidden" id="username"  name="username" />
+            <input type="hidden" id="password"  name="password"/>
+            <p>
+                <label style="width:180px;">OTP</label>
+                <input name="otp" id="otp" />
+            </p>
+            <p>
+                <label style="width:180px;">New Password</label>
+                <input name="new_password" id="new_password" />
+            </p>
+            <p>
+                <label style="width:180px;">Confirm New Password</label>
+                <input name="new_password_confirm" id="new_password_confirm" />
+            </p>
+            <div class="error3"></div>
+            <div class="error4"></div>
+
+            <p>
+                <input style="width:375px;" id="btn2" class="submit" type="button" value="Confirm" />
+            </p>
+        }
+
+    </fieldset>
+</div>
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            // Require old password when setting new one.
+            jQuery.validator.addMethod("clear_err", function (value, element, options) {
+
+                $("#form1 div.error2").hide();
+                var valid = true;
+
+                return valid;
+            }, jQuery.validator.format("Can not be clear"));
+
+            $.validator.addMethod("PASSWORD", function (value, element) {
+                return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(value);
+            }, "Passwords must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters.");
+
+
+            $("#form1").validate({
+                errorLabelContainer: $("#form1 div.error1"),
+                rules: {
+                    uname: {
+                        "clear_err": true,
+                        "required": true
+                    },
+                    mobile: {
+                        "clear_err": true,
+                        "required": true,
+                        "number": true,
+                        "rangelength": [10, 10]
+                    }
+                },
+                messages: {
+                    //username: "Please enter your username",
+                    uname: {
+                        "required": "Please enter your username",
+                    },
+                    mobile: {
+                        "required": "Please enter your mobile number",
+                        "number": "Please enter your valid mobile number",
+                        "rangelength": "Length must 10 digit"
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    /*
+                    if (element.attr("name") == "gender") {
+                        error.insertAfter("#gendererror");
+                    } else {
+                        error.insertAfter(element);
+                    }
+                    */
+                }
+            })
+
+            $("#form2").validate({
+                errorLabelContainer: $("#form2 div.error3"),
+                rules: {
+                    otp: {
+                        "clear_err": true,
+                        "required": true
+                    },
+                    new_password: {
+                        "clear_err": true,
+                        "required": true,
+                        "PASSWORD": true
+                    },
+                    new_password_confirm: {
+                        "clear_err": true,
+                        "required": true
+                    }
+                },
+                messages: {
+                    otp: "Please enter your OTP",
+                    new_password: {
+                        "required": "Please enter your new password"
+                    },
+                    new_password_confirm: {
+                        "required": "Please enter your new password(confirm)"
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    /*
+                    if (element.attr("name") == "gender") {
+                        error.insertAfter("#gendererror");
+                    } else {
+                        error.insertAfter(element);
+                    }
+                    */
+                }
+            })
+
+            $('#btn1').on('click', function () {
+                if ($("#form1").valid()) {
+                    var _username = $("#uname").val();
+                    var _mobile_no = $("#mobile").val();
+                    /*
+                    var baseUrl = 'https://bblamapiauthen.azurewebsites.net/api/forgotb';
+                    var xhr = new XMLHttpRequest();
+                    if ("withCredentials" in xhr) {
+                        xhr.onerror = function () {
+                            alert('Invalid URL or Cross-Origin Request Blocked.  You must explicitly add this site (' + window.location.origin + ') to the list of allowed websites in the administrator UI');
+                        }
+                        xhr.onload = function () {
+                            alert(this.responseText);
+                        };
+                        xhr.open('POST', baseUrl, true);
+                        xhr.withCredentials = true;
+                        xhr.send();
+                    } else {
+                        alert("CORS is not supported for this browser!")
+                    }
+                    */
+                    var baseUrl = 'https://bblamapiauthen.azurewebsites.net/api/forgotb';
+                    $.ajax({
+                        url: baseUrl,
+                        data: { Username: _username, Mobile_No: _mobile_no, Type: 2 },
+                        type: 'POST',
+                        async: true,
+                        cache: false,
+                        dataType: 'json',
+                        //xhrFields: { withCredentials: true },
+                        //accept: 'application/json'
+                        accept: 'application/x-www-form-urlencoded'
+                    }).done(function (theResponse) {
+                        //alert(theResponse.Message + "_" + theResponse.Status);
+                        if (theResponse.Status == "Fail") {
+                            $("#form1 div.error2").html("<label class='error'>" + theResponse.Message + "</label>").show();
+                        } else {
+                            $("#mobile_no").val($("#mobile").val());
+                            $("#username").val($("#uname").val());
+                        }
+                        /*
+                        alert(theResponse);
+                        $.each(theResponse, function (index, item) {
+                            $(".error1").html(item.Message + "_" + item.Status);
+                            alert(item.Message + "_" + item.Status);
+                        });
+                        */
+                    })
+                        .fail(function (xhr, textStatus, error) {
+                            var title, message;
+                            switch (xhr.status) {
+                                case 403:
+                                    title = xhr.responseJSON.errorSummary;
+                                    message = 'Please login to your organization before running the test';
+                                    break;
+                                default:
+                                    title = 'Invalid URL or Cross-Origin Request Blocked';
+                                    message = 'You must explicitly add this site (' + window.location.origin + ') to the list of allowed websites in your administrator UI';
+                                    break;
+                            }
+                            alert(title + ': ' + message);
+                        });
+                    /*
+                    $.ajax({
+                        type: 'post',
+                        async: false,
+                        url: 'https://bblamapiauthen.azurewebsites.net/api/forgotb',
+                        cache:false,
+                        data: { Username: _username, Mobile_No: _mobile_no, Type:2 },
+                        //contentType: "application/json; charset=utf-8",
+                        contentType: "application/x-www-form-urlencoded",
+                        crossDomain: true,
+                        dataType: 'json',
+                        beforeSend: function (xhr) {
+
+                            xhr.setRequestHeader('Access-Control-Allow-origin', 'true');
+
+                        },
+                        beforeSend: function() {
+                            $(".error1").html("<img id='_load'  src='../images/indicator.gif' />");
+                            //$('body').showLoading();
+                        },
+                        complete: function() {
+                            //$('body').hideLoading();
+                        },
+                        success: function(theResponse) {
+                            //$(".error1").html(theResponse);
+                            $.each(theResponse.d, function(index, item) {
+                                $(".error1").html(tem.Message + "_" + item.Status);
+                            });
+                        },
+                        error: function(theResponse) {
+                            $.each(theResponse.d, function(index, item) {
+                                $(".error1").html(tem.Message + "_" + item.Status);
+                            });
+                            //$("#_res").html(theResponse);
+                            alert("Failed to load");
+                            return false;
+                        }
+                }); //	end ajax
+            */
+                }
+            });
+
+            $('#btn2').on('click', function () {
+                if ($("#form2").valid()) {
+                    var _otp = $("#otp").val();
+                    var _mobile = $("#mobile").val();
+                    var _new_password = $("#new_password").val();
+
+                    var baseUrl = 'https://bblamapiauthen.azurewebsites.net/api/forgotb_verify';
+                    $.ajax({
+                        url: baseUrl,
+                        data: { OTP: _otp, Mobile_No: _mobile, Password: _new_password, Type: 2 },
+                        type: 'POST',
+                        async: true,
+                        cache: false,
+                        dataType: 'json',
+                        //xhrFields: { withCredentials: true },
+                        //accept: 'application/json'
+                        accept: 'application/x-www-form-urlencoded'
+                    }).done(function (theResponse) {
+                        //alert(theResponse.Message + "_" + theResponse.Status);
+                        if (theResponse.Status == "Fail") {
+                            $("#form2 div.error4").html("<label class='error'>" + theResponse.Message + "</label>").show();
+                        } else {
+                            $("#username").val(theResponse.UserName);
+                            $("#password").val(theResponse.Password);
+                            //alert(JSON.stringify(theResponse));
+                            //submit
+                            $("#form2").submit();
+                        }
+                        /*
+                        alert(theResponse);
+                        $.each(theResponse, function (index, item) {
+                            $(".error1").html(item.Message + "_" + item.Status);
+                            alert(item.Message + "_" + item.Status);
+                        });
+                        */
+                    })
+                        .fail(function (xhr, textStatus, error) {
+                            var title, message;
+                            switch (xhr.status) {
+                                case 403:
+                                    title = xhr.responseJSON.errorSummary;
+                                    message = 'Please login to your organization before running the test';
+                                    break;
+                                default:
+                                    title = 'Invalid URL or Cross-Origin Request Blocked';
+                                    message = 'You must explicitly add this site (' + window.location.origin + ') to the list of allowed websites in your administrator UI';
+                                    break;
+                            }
+                            alert(title + ': ' + message);
+                        });
+                }
+            });
+
+        });
+    </script>
+
+}

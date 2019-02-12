@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "forgot_success";
+}
+
+<div class="header">
+    <div class="container">
+        <div class="navbar">
+            <a href="#" class="toggle-nav"><span class="icon icon-menu"></span></a>
+            <div id="Divlogo" class="logo-home logo-th pull-left" style="cursor:pointer;" onclick="document.location=Home;"><a href="~/">BBLAM</a></div>
+
+            <ul class="nav pull-left">
+                <li><a href="https://iapp.bblam.co.th" id="Home" title="Home">หน้าแรก</a></li>
+                <li><a href="./" id="Home" title="forgot" class="active">ลืมรหัสผ่าน</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container slider-container">
+    Fail (โปรดรอซักครู่)
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        setTimeout(function () { location.href = "https://iapp.bblam.co.th" }, 3000);
+    </script>
+}

@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+
+    <style>
+        div.error1 label, div.error2 label, div.error3 label, div.error4 label {
+            color: red;
+        }
+
+        label.error {
+            display: block;
+            margin-left: 1em;
+            width: auto;
+        }
+    </style>
+</head>
+<body  class="home page">
+
+    @RenderBody()
+
+    <div class="strip">
+
+
+        <div class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <p>บริษัทหลักทรัพย์จัดการกองทุนรวม บัวหลวง จำกัด, สงวนลิขสิทธิ์<br />เหมาะสำหรับการใช้งานบนบราวเซอร์ IE 10 ขึ้นไป Firefox Chrome</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="note">
+                            175 อาคารสาธรซิตี้ทาวเวอร์ ชั้น 7 ชั้น 21 และ ชั้น 26 ถนนสาทรใต้ แขวงทุ่งมหาเมฆ เขตสาทร กรุงเทพฯ 10120
+                            โทร 0-2674-6488 แฟกซ์ 0-2679-5996
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.footer -->
+
+
+    </div><!-- /.strip -->
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: true)
+</body>
+</html>
